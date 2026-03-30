@@ -1,0 +1,175 @@
+<div class="container mt-4">
+  <h3>{{ isEdit ? 'Editar Apólice' : 'Nova Apólice' }}</h3>
+
+  <form [formGroup]="form">
+    <!-- 🔹 Informações -->
+    <fieldset class="border p-3 mt-3">
+      <legend>Informações</legend>
+
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field class="w-100 compact-form" appearance="outline">
+            <mat-label>Número Apólice</mat-label>
+            <input matInput formControlName="numeroApolice" />
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-4">
+          <mat-form-field appearance="outline" class="w-100 compact-form">
+            <mat-label>Proposta</mat-label>
+            <input type="text" matInput formControlName="idProposta" [matAutocomplete]="auto" />
+
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+              <mat-option *ngFor="let option of filteredPropostas$ | async" [value]="option">
+                {{ option.numeroProposta }} - {{ option.nomeCliente }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-4">
+          <mat-form-field class="w-100 compact-form" appearance="outline">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="codigoStatus">
+              <mat-option [value]="-1">Todos</mat-option>
+              <mat-option [value]="0">Ativa</mat-option>
+              <mat-option [value]="1">Cancelada</mat-option>
+              <mat-option [value]="2">Suspensa</mat-option>
+              <mat-option [value]="3">Encerrada</mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('codigoStatus')?.hasError('min')">
+              Status é obrigatório
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- 💰 Financeiro -->
+    <fieldset class="border p-3 mt-3">
+      <legend>Financeiro</legend>
+
+      <div class="row">
+        <div class="col-md-3">
+          <mat-form-field class="w-100 compact-form" appearance="outline">
+            <mat-label>Valor Cobertura</mat-label>
+            <input
+              matInput
+              formControlName="valorCobertura"
+              [value]="valorCoberturaFormatado"
+              (input)="onValorCoberturaChange($event)"
+            />
+            <mat-error *ngIf="form.get('valorCobertura')?.hasError('required')">
+              Valor Cobertura é obrigatório
+            </mat-error>
+            <mat-error *ngIf="form.get('valorCobertura')?.hasError('min')">
+              Valor Cobertura é obrigatório
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-3">
+          <mat-form-field class="w-100 compact-form" appearance="outline">
+            <mat-label>Prêmio</mat-label>
+            <input
+              matInput
+              formControlName="premioFinal"
+              [value]="premioFinalFormatado"
+              (input)="onPremioFinalChange($event)"
+            />
+            <mat-error *ngIf="form.get('premioFinal')?.hasError('required')">
+              Prêmio Final é obrigatório
+            </mat-error>
+            <mat-error *ngIf="form.get('premioFinal')?.hasError('min')">
+              Prêmio Final é obrigatório
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-3">
+          <mat-form-field class="w-100 compact-form" appearance="outline">
+            <mat-label>Parcelas</mat-label>
+            <input matInput type="number" formControlName="quantidadeParcelas" />
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-3">
+          <mat-form-field class="w-100 compact-form" appearance="outline">
+            <mat-label>Forma Pagamento</mat-label>
+            <mat-select formControlName="formaPagamento">
+              <mat-option value="Credito">Crédito</mat-option>
+              <mat-option value="Debito">Débito</mat-option>
+              <mat-option value="Boleto">Boleto</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- 📅 Período -->
+    <fieldset class="border p-3 mt-3">
+      <legend>Período</legend>
+      <!--
+         <mat-label>Data Contratação</mat-label>
+            <input matInput type="date" formControlName="dataContratacao">
+      -->
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field class="w-100 compact-form" appearance="outline">
+            <mat-label>Data Contratação</mat-label>
+
+            <input matInput [matDatepicker]="picker1" formControlName="dataContratacao" />
+
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <!--
+           <mat-label>Data Início</mat-label>
+            <input matInput type="date" formControlName="dataInicioVigencia" />
+        -->
+        <div class="col-md-4">
+          <mat-form-field class="w-100 compact-form" appearance="outline">
+            <mat-label>Data Início</mat-label>
+
+            <input matInput [matDatepicker]="picker2" formControlName="dataInicioVigencia" />
+
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <!--
+           <mat-label>Data Fim</mat-label>
+            <input matInput type="date" formControlName="dataFimVigencia" />
+        -->
+        <div class="col-md-4">
+          <mat-form-field class="w-100 compact-form" appearance="outline">
+            <mat-label>Data Fim</mat-label>
+
+            <input
+              matInput
+              [matDatepicker]="picker3"
+              [errorStateMatcher]="matcher"
+              formControlName="dataFimVigencia"
+            />
+
+            <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+            <mat-datepicker #picker3></mat-datepicker>
+            <mat-error *ngIf="form.hasError('dataInvalida')">
+              A data de início não pode ser posterior à data de fim.
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- 🔘 Ações -->
+    <div class="text-end mt-3">
+      <button mat-raised-button color="primary" (click)="salvar()">
+        {{ isEdit ? 'Atualizar' : 'Salvar' }}
+      </button>
+
+      <button mat-stroked-button class="ms-2" (click)="cancelar()">Cancelar</button>
+    </div>
+  </form>
+</div>

@@ -1,3 +1,4 @@
+import { Mensagem } from './../../../Mensagem';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -82,7 +83,7 @@ export class ListaApoliceComponent implements OnInit, OnDestroy {
     this.dtTrigger.next(null);
   }
   carregarDados() {
-  
+
     console.log('Carregar Dados');
     if (this.filtro.dataContratacao)
       this.filtro.dataContratacao =
@@ -173,7 +174,15 @@ export class ListaApoliceComponent implements OnInit, OnDestroy {
   }
 
   confirmarExclusao(id: number) {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent,{
+      width: '100%',
+      maxWidth: "450px",
+      autoFocus: false,
+      data:{
+        titulo: "Excluir Apólice",
+        mensagem: "Deseja realmente remover este item do sistema?"
+      }
+    });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {

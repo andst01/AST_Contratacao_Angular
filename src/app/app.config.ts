@@ -21,14 +21,14 @@ export const appConfig: ApplicationConfig = {
     provideAuth({
       config: {
         authority: 'https://localhost:5001',
-        redirectUrl: window.location.origin,
+        redirectUrl: window.location.origin + '/auth-callback',
         postLogoutRedirectUri: window.location.origin,
         clientId: 'angular',
         scope: 'openid profile offline_access roles api1',
         responseType: 'code',
         silentRenew: true,
         useRefreshToken: true,
-        logLevel: LogLevel.Debug,
+        logLevel: LogLevel.None,
       },
     }),
   ]

@@ -26,6 +26,7 @@ import { map, Observable, of, startWith } from 'rxjs';
 import { PropostaService } from '../../../../core/services/PropostaService';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { Proposta } from '../../../proposta/models/Proposta';
+import { NotificationService } from '../../../../core/services/NotificationService';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -81,6 +82,7 @@ export class ApoliceFormComponent {
     private route: ActivatedRoute,
     private router: Router,
     private propostaService: PropostaService,
+    private notify: NotificationService,
   ) {}
 
   ngOnInit(): void {
@@ -128,7 +130,7 @@ export class ApoliceFormComponent {
         //const propostaCompleta = this.listaMestraPropostas.find((p) => p.id === data.idProposta);
         //console.log(this.listaMestraPropostas[0])
       });
-    }else{
+    } else {
       this.propostaService.listar().subscribe((dados) => {
         this.listaMestraPropostas = dados;
 
@@ -202,16 +204,29 @@ export class ApoliceFormComponent {
     if (this.form.invalid) return;
     const formValue = this.form.value;
 
-    formValue.dataInicioVigencia = DateUtil.formatarParaApi(formValue.dataInicioVigencia);
-    formValue.dataFimVigencia = DateUtil.formatarParaApi(formValue.dataFimVigencia);
-    formValue.dataContratacao = DateUtil.formatarParaApi(formValue.dataContratacao);
+    const payload = {
+      ...formValue,
+      idProposta: formValue.idProposta?.id ? formValue.idProposta.id : formValue.idProposta,
+      valorCobertura: MoedaUtil.parseMoeda(this.valorCoberturaFormatado),
+      premioFinal: MoedaUtil.parseMoeda(this.premioFinalFormatado),
+      dataInicioVigencia: DateUtil.formatarParaApi(formValue.dataInicioVigencia),
+      dataFimVigencia: DateUtil.formatarParaApi(formValue.dataFimVigencia),
+      dataContratacao: DateUtil.formatarParaApi(formValue.dataContratacao),
+    };
 
-    console.log(this.form.value);
+    console.log(payload);
+
     /*
-    this.service.salvar(this.form.value).subscribe(() => {
-      this.router.navigate(['/apolice']);
+    this.service.salvar(this.form.value).subscribe({
+      next: (data) => {
+        this.notify.success(data.mensagem?.descricao ?? 'Salvo com sucesso!');
+        this.router.navigate(['/apolice']);
+      },
+      error: (err) => {
+        const msg = err.error?.mensagem?.descricao || 'Erro ao processar requisição';
+        this.notify.error(msg);
+      },
     });
-
     */
   }
 

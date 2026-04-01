@@ -1,12 +1,18 @@
-<h2 mat-dialog-title>{{ data.titulo }}</h2>
+<div class="custom-modal-container">
+  <h4 mat-dialog-title class="modal-title">{{ data.titulo }}</h4>
 
-<mat-dialog-content>
-  <p>{{ data.mensagem }}</p>
-</mat-dialog-content>
+  <div class="divider"></div>
 
-<mat-dialog-actions align="end">
-  <button mat-button (click)="cancelar()">Cancelar</button>
-  <button mat-raised-button color="warn" (click)="confirmar()">
-    Confirmar
-  </button>
-</mat-dialog-actions>
+  <mat-dialog-content class="modal-body">
+    <p>{{ data.mensagem }}</p>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="modal-actions">
+    <button mat-button (click)="cancelar()" class="btn-flat">
+      Cancelar
+    </button>
+    <button mat-raised-button (click)="confirmar()" class="btn-sharp">
+      Confirmar
+    </button>
+  </mat-dialog-actions>
+</div>

@@ -16,13 +16,14 @@ import { MY_DATE_FORMATS } from '../../../util/MyDateFormats';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
-
+import { DateUtil } from '../../../util/DateUtil';
 
 declare var $: any;
 
 @Component({
   selector: 'app-lista-apolice-component',
-  imports: [CommonModule,
+  imports: [
+    CommonModule,
     FormsModule,
     MatButtonModule,
     MatDatepickerModule,
@@ -31,16 +32,17 @@ declare var $: any;
     MatMomentDateModule,
     ReactiveFormsModule,
     MatSelectModule,
-    MatIconModule],
-  providers:[
-     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
-     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS}
+    MatIconModule,
+  ],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
   ],
   templateUrl: './lista-apolice-component.html',
   styleUrl: './lista-apolice-component.css',
 })
 export class ListaApoliceComponent implements OnInit, OnDestroy {
-  dtOptions: Config ={};
+  dtOptions: Config = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
   constructor(
@@ -49,11 +51,11 @@ export class ListaApoliceComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
   ) {}
   ngOnDestroy(): void {
-   this.dtTrigger.unsubscribe();
+    this.dtTrigger.unsubscribe();
   }
 
   ngOnInit(): void {
-   // this.configDataTable();
+    // this.configDataTable();
     this.carregarDados();
   }
 
@@ -63,7 +65,7 @@ export class ListaApoliceComponent implements OnInit, OnDestroy {
     status: '-1',
   };
 
-  configDataTable(){
+  configDataTable() {
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 5, // Quantidade padrão inicial
@@ -73,14 +75,19 @@ export class ListaApoliceComponent implements OnInit, OnDestroy {
 
       // Tradução para Português
       language: {
-        url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json'
-      }
+        url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json',
+      },
     };
 
     this.dtTrigger.next(null);
   }
   carregarDados() {
+  
     console.log('Carregar Dados');
+    if (this.filtro.dataContratacao)
+      this.filtro.dataContratacao =
+        DateUtil.formatarParaApi(new Date(this.filtro.dataContratacao)) ?? '';
+
     console.log(this.filtro);
     this.service.listarComFiltro(this.filtro).subscribe({
       next: (data) => {
@@ -99,15 +106,15 @@ export class ListaApoliceComponent implements OnInit, OnDestroy {
 
     $('#tabelaApolice').DataTable({
       data: data,
-      pagingType: "full_numbers",
-       pageLength: 5, // Quantidade padrão inicial
+      pagingType: 'full_numbers',
+      pageLength: 5, // Quantidade padrão inicial
       lengthMenu: [3, 5, 10, 25], // As opções que você pediu
       searching: false, // Remove o campo de busca (Search)
       processing: true, // Habilita o indicador de "Loading" nativo
 
       // Tradução para Português
       language: {
-        url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json'
+        url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json',
       },
       columns: [
         { data: 'numeroApolice' },

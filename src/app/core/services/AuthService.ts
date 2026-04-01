@@ -13,6 +13,9 @@ export class AuthService {
   constructor() {
     // Subscrevemos uma vez para manter nossas propriedades sincronizadas
     this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData }) => {
+
+     debugger;
+      console.log(userData);
       this.isAuthenticated.set(isAuthenticated);
       this.userProfile.set(userData);
     });

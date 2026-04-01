@@ -211,7 +211,7 @@ export class ApoliceFormComponent {
       premioFinal: MoedaUtil.parseMoeda(this.premioFinalFormatado),
       dataInicioVigencia: DateUtil.formatarParaApi(formValue.dataInicioVigencia),
       dataFimVigencia: DateUtil.formatarParaApi(formValue.dataFimVigencia),
-      dataContratacao: DateUtil.formatarParaApi(formValue.dataContratacao),
+      dataContratacao: DateUtil.formatarParaApi(formValue.dataContratacao)
     };
 
     console.log(payload);

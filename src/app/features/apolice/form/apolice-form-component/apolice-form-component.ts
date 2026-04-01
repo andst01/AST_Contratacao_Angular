@@ -216,8 +216,8 @@ export class ApoliceFormComponent {
 
     console.log(payload);
 
-    /*
-    this.service.salvar(this.form.value).subscribe({
+/*
+    this.service.salvar(payload).subscribe({
       next: (data) => {
         this.notify.success(data.mensagem?.descricao ?? 'Salvo com sucesso!');
         this.router.navigate(['/apolice']);
@@ -227,7 +227,9 @@ export class ApoliceFormComponent {
         this.notify.error(msg);
       },
     });
+
     */
+
   }
 
   cancelar() {

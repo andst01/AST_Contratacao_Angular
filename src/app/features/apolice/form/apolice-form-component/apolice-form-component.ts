@@ -202,7 +202,9 @@ export class ApoliceFormComponent {
 
   salvar() {
     if (this.form.invalid) return;
-    const formValue = this.form.value;
+    const formValue = this.form.getRawValue();
+
+    console.log(this.form.value)
 
     const payload = {
       ...formValue,
@@ -216,19 +218,20 @@ export class ApoliceFormComponent {
 
     console.log(payload);
 
-/*
+
     this.service.salvar(payload).subscribe({
       next: (data) => {
         this.notify.success(data.mensagem?.descricao ?? 'Salvo com sucesso!');
-        this.router.navigate(['/apolice']);
+        //this.router.navigate(['/apolice']);
       },
       error: (err) => {
+        //console.log(err)
         const msg = err.error?.mensagem?.descricao || 'Erro ao processar requisição';
         this.notify.error(msg);
       },
     });
 
-    */
+
 
   }
 

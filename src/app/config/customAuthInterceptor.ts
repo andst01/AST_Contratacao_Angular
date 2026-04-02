@@ -8,6 +8,7 @@ export const customAuthInterceptor: HttpInterceptorFn = (req, next) => {
 
   // Pegamos o token atual da biblioteca
   return oidcSecurityService.getAccessToken().pipe(
+  
     take(1),
     switchMap((token) => {
       // Se tivermos um token, clonamos a requisição e adicionamos o Header

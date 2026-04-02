@@ -5,12 +5,20 @@ import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import 'moment/locale/pt-br';
-import { provideAuth, LogLevel } from 'angular-auth-oidc-client';
+import { provideAuth, LogLevel, OidcSecurityService } from 'angular-auth-oidc-client';
 import { customAuthInterceptor } from './config/customAuthInterceptor';
+import { APP_INITIALIZER } from '@angular/core';
 
 export const appConfig: ApplicationConfig = {
 
   providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (oidcSecurityService: OidcSecurityService) => () =>
+        oidcSecurityService.checkAuth(), // O Angular espera essa Promise/Observable resolver
+      deps: [OidcSecurityService],
+      multi: true,
+    },
     provideBrowserGlobalErrorListeners(),
     provideHttpClient(),
     provideRouter(routes),

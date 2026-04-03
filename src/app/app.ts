@@ -2,6 +2,7 @@ import { Component, signal, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './features/navbar/navbar-component/navbar-component';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { AuthService } from './core/services/AuthService';
 
 @Component({
   selector: 'app-root',
@@ -19,21 +20,19 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
 })
 export class App implements OnInit {
   private readonly oidcSecurityService = inject(OidcSecurityService);
+  private readonly authService = inject(AuthService);
+  isAuthenticated = false;
+  userData: any = null;
 
-  ngOnInit() {
-    this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, errorMessage }) => {
-      debugger;
-      if (isAuthenticated) {
-        console.log('Usuário autenticado com sucesso!');
-      } else {
-        // Se não houver erro e não estiver autenticado, aí sim redireciona.
-        // Isso evita tentar logar novamente se o IdentityServer retornar um erro real.
-        if (!errorMessage) {
-          console.log('Iniciando redirecionamento para login...');
-          this.oidcSecurityService.authorize();
-        } else {
-          console.error('Erro na autenticação:', errorMessage);
-        }
+  constructor(){}
+
+ ngOnInit() {
+    this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData, errorMessage }) => {
+
+      this.authService.updateState(isAuthenticated, userData);
+
+      if (!isAuthenticated && !errorMessage && !window.location.pathname.includes('auth-callback')) {
+        this.oidcSecurityService.authorize();
       }
     });
   }
@@ -43,7 +42,7 @@ export class App implements OnInit {
   }
 
   logout() {
-    this.oidcSecurityService.logoff();
+    this.authService.logout();
   }
 }
 //export class App {

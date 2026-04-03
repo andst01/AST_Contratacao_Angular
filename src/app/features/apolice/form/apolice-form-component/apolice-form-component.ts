@@ -72,6 +72,7 @@ export class ApoliceFormComponent implements OnInit {
   matcher = new MyErrorStateMatcher();
   listaMestraPropostas: any[] = [];
   filteredPropostas$: Observable<any[]> = of([]);
+  
 
   constructor(
     private fb: FormBuilder,

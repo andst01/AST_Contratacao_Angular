@@ -18,8 +18,11 @@ export class CallbackComponent {
 
     this.authService.checkAuth().subscribe(({ isAuthenticated }) => {
       if (isAuthenticated) {
+        console.log("Usuario: ")
+        console.log(this.authService.userProfile)
         this.router.navigate(['/apolice']);
       } else {
+
         this.router.navigate(['/']);
       }
     });

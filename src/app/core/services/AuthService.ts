@@ -1,35 +1,20 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, OnInit, inject, signal } from '@angular/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { map, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class AuthService {
+export class AuthService  {
 
   private readonly oidcSecurityService = inject(OidcSecurityService);
   public userProfile = signal<any>(null);
-  public isAuthenticated = signal<boolean>(false);
+  public loggedIn = signal<boolean>(false);
 
 
-  constructor() {
-    // Subscrevemos uma vez para manter nossas propriedades sincronizadas
-   /*  this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData }) => {
-
-     debugger;
-      console.log(userData);
-      this.isAuthenticated.set(isAuthenticated);
-      this.userProfile.set(userData);
-    }); */
+  updateState(isAuthenticated: boolean, userData: any) {
+    this.loggedIn.set(isAuthenticated);
+    this.userProfile.set(userData);
   }
 
-  checkAuth(): Observable<any> {
-    return this.oidcSecurityService.checkAuth().pipe(
-      map(result => {
-        this.isAuthenticated.set(result.isAuthenticated);
-        this.userProfile.set(result.userData);
-        return result;
-      })
-    );
-  }
 
   login() {
     this.oidcSecurityService.authorize();

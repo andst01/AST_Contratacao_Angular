@@ -22,6 +22,7 @@ export class App implements OnInit {
 
   ngOnInit() {
     this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, errorMessage }) => {
+      debugger;
       if (isAuthenticated) {
         console.log('Usuário autenticado com sucesso!');
       } else {

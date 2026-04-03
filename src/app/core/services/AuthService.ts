@@ -12,13 +12,23 @@ export class AuthService {
 
   constructor() {
     // Subscrevemos uma vez para manter nossas propriedades sincronizadas
-    this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData }) => {
+   /*  this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, userData }) => {
 
      debugger;
       console.log(userData);
       this.isAuthenticated.set(isAuthenticated);
       this.userProfile.set(userData);
-    });
+    }); */
+  }
+
+  checkAuth(): Observable<any> {
+    return this.oidcSecurityService.checkAuth().pipe(
+      map(result => {
+        this.isAuthenticated.set(result.isAuthenticated);
+        this.userProfile.set(result.userData);
+        return result;
+      })
+    );
   }
 
   login() {

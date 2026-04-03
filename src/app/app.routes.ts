@@ -6,8 +6,8 @@ import { CallbackComponent } from './features/callback/callback-component/callba
 import { ListaPropostaComponent } from './features/proposta/list/lista-proposta-component/lista-proposta-component';
 
 export const routes: Routes = [
-  { path: 'auth-callback', component: CallbackComponent },
-  { path: '', redirectTo: 'apolice', pathMatch: 'full' },
+ // { path: 'auth-callback', component: CallbackComponent },
+ // { path: '', redirectTo: 'auth-callback', pathMatch: 'full' },
   { path: 'apolice', component: ListaApoliceComponent },
   { path: 'apolice/novo', component: ApoliceFormComponent },
   { path: 'apolice/editar/:id', component: ApoliceFormComponent },

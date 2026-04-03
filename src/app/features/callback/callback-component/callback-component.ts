@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { AuthService } from '../../../core/services/AuthService';
 
 @Component({
   selector: 'app-callback-component',
@@ -10,7 +11,7 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
 })
 export class CallbackComponent {
 
-  constructor(private authService: OidcSecurityService,
+  constructor(private authService: AuthService,
               private router: Router){}
 
   ngOnInit() {
@@ -18,9 +19,11 @@ export class CallbackComponent {
     this.authService.checkAuth().subscribe(({ isAuthenticated }) => {
       if (isAuthenticated) {
         this.router.navigate(['/apolice']);
+      } else {
+        this.router.navigate(['/']);
       }
     });
-    
+
   }
 
 }

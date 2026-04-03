@@ -1,0 +1,200 @@
+<div class="container mt-4">
+  <h3>{{ isEdit ? 'Editar Proposta' : 'Nova Proposta' }}</h3>
+
+  <form [formGroup]="form">
+    <!-- 🔹 Informações -->
+    <fieldset class="border p-3 mt-3">
+      <legend>Informações</legend>
+
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field class="w-100 compact-form" appearance="outline">
+            <mat-label>Número Proposta</mat-label>
+            <input matInput formControlName="numeroProposta" />
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-4">
+
+          <mat-form-field class="w-100 compact-form" appearance="outline">
+            <mat-label>Tipo Seguro</mat-label>
+            <input matInput formControlName="tipoSeguro" />
+          </mat-form-field>
+          <!--
+          <mat-form-field appearance="outline" class="w-100 compact-form">
+            <mat-label>Proposta</mat-label>
+            <input type="text" matInput formControlName="idProposta" [matAutocomplete]="auto" />
+
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+              <mat-option *ngFor="let option of filteredPropostas$ | async" [value]="option">
+                {{ option.numeroProposta }} - {{ option.nomeCliente }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field> -->
+        </div>
+
+        <div class="col-md-4">
+          <mat-form-field class="w-100 compact-form" appearance="outline">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="codigoStatus">
+              <mat-option [value]="-1">Todos</mat-option>
+            <mat-option [value]="0">Criada</mat-option>
+            <mat-option [value]="1">Em Análise</mat-option>
+            <mat-option [value]="2">Aprovada</mat-option>
+            <mat-option [value]="3">Recusada</mat-option>
+            <mat-option [value]="4">Expirada</mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('codigoStatus')?.hasError('min')">
+              Status é obrigatório
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- 💰 Financeiro -->
+    <fieldset class="border p-3 mt-3">
+      <legend>Financeiro</legend>
+
+      <div class="row">
+        <div class="col-md-3">
+          <mat-form-field class="w-100 compact-form" appearance="outline">
+            <mat-label>Valor Cobertura</mat-label>
+            <input
+              matInput
+              formControlName="valorCobertura"
+              [value]="valorCoberturaFormatado"
+              (input)="onValorCoberturaChange($event)"
+            />
+            <mat-error *ngIf="form.get('valorCobertura')?.hasError('required')">
+              Valor Cobertura é obrigatório
+            </mat-error>
+            <mat-error *ngIf="form.get('valorCobertura')?.hasError('min')">
+              Valor Cobertura é obrigatório
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-3">
+          <mat-form-field class="w-100 compact-form" appearance="outline">
+            <mat-label>Prêmio</mat-label>
+            <input
+              matInput
+              formControlName="premio"
+              [value]="premioFinalFormatado"
+              (input)="onPremioFinalChange($event)"
+            />
+            <mat-error *ngIf="form.get('premio')?.hasError('required')">
+              Prêmio Final é obrigatório
+            </mat-error>
+            <mat-error *ngIf="form.get('premio')?.hasError('min')">
+              Prêmio Final é obrigatório
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-3">
+          <mat-form-field class="w-100 compact-form" appearance="outline">
+            <mat-label>Parcelas</mat-label>
+            <input matInput type="number" formControlName="quantidadeParcelas" />
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-3">
+          <mat-form-field class="w-100 compact-form" appearance="outline">
+            <mat-label>Forma Pagamento</mat-label>
+            <mat-select formControlName="formaPagamento">
+              <mat-option value="Credito">Crédito</mat-option>
+              <mat-option value="Debito">Débito</mat-option>
+              <mat-option value="Boleto">Boleto</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </fieldset>
+
+
+    <fieldset class="border p-3 mt-3">
+      <legend>Período</legend>
+      <!--
+         <mat-label>Data Contratação</mat-label>
+            <input matInput type="date" formControlName="dataContratacao">
+      -->
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field class="w-100 compact-form" appearance="outline">
+            <mat-label>Data de Criação</mat-label>
+
+            <input matInput [matDatepicker]="picker1" formControlName="dataCriacao" />
+
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <!--
+           <mat-label>Data Início</mat-label>
+            <input matInput type="date" formControlName="dataInicioVigencia" />
+        -->
+        <div class="col-md-4">
+          <mat-form-field class="w-100 compact-form" appearance="outline">
+            <mat-label>Data de Validade</mat-label>
+
+            <input matInput [matDatepicker]="picker2" formControlName="dataValidade" />
+
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <!--
+           <mat-label>Data Fim</mat-label>
+            <input matInput type="date" formControlName="dataFimVigencia" />
+        -->
+
+      </div>
+    </fieldset>
+    <fieldset  class="border p-3 mt-3">
+      <legend>
+        Cliente
+      </legend>
+      <div class="row">
+        <div class="col-md-8">
+
+          <mat-form-field appearance="outline" class="w-100 compact-form">
+            <mat-label>Cliente</mat-label>
+            <input type="text" matInput formControlName="idCliente" [matAutocomplete]="auto" />
+
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+              <mat-option *ngFor="let option of filteredPropostas$ | async" [value]="option">
+                {{ option.nomeCpf }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+        </div>
+      </div>
+
+    </fieldset>
+    <fieldset  class="border p-3 mt-3">
+      <legend>
+        Observações
+      </legend>
+      <div class="row">
+        <div class="col-md-8">
+          <mat-form-field class="w-100 compact-form" appearance="outline">
+            <mat-label>Observações</mat-label>
+            <input matInput formControlName="observacoes" />
+          </mat-form-field>
+        </div>
+      </div>
+
+    </fieldset>
+    <!-- 🔘 Ações -->
+    <div class="text-end mt-3">
+      <button mat-raised-button color="primary" (click)="salvar()">
+        {{ isEdit ? 'Atualizar' : 'Salvar' }}
+      </button>
+
+      <button mat-stroked-button class="ms-2" (click)="cancelar()">Cancelar</button>
+    </div>
+  </form>
+</div>

@@ -63,17 +63,14 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   templateUrl: './apolice-form-component.html',
   styleUrl: './apolice-form-component.css',
 })
-export class ApoliceFormComponent {
+export class ApoliceFormComponent implements OnInit {
   form!: FormGroup;
   isEdit = false;
   id!: number;
   valorCoberturaFormatado = '';
   premioFinalFormatado = '';
   matcher = new MyErrorStateMatcher();
-  // Lista completa que vem do servidor
   listaMestraPropostas: any[] = [];
-
-  // Lista filtrada que o HTML vai observar
   filteredPropostas$: Observable<any[]> = of([]);
 
   constructor(
@@ -204,7 +201,7 @@ export class ApoliceFormComponent {
     if (this.form.invalid) return;
     const formValue = this.form.getRawValue();
 
-    console.log(this.form.value)
+    console.log(this.form.value);
 
     const payload = {
       ...formValue,
@@ -213,11 +210,10 @@ export class ApoliceFormComponent {
       premioFinal: MoedaUtil.parseMoeda(this.premioFinalFormatado),
       dataInicioVigencia: DateUtil.formatarParaApi(formValue.dataInicioVigencia),
       dataFimVigencia: DateUtil.formatarParaApi(formValue.dataFimVigencia),
-      dataContratacao: DateUtil.formatarParaApi(formValue.dataContratacao)
+      dataContratacao: DateUtil.formatarParaApi(formValue.dataContratacao),
     };
 
     console.log(payload);
-
 
     this.service.salvar(payload).subscribe({
       next: (data) => {
@@ -230,9 +226,6 @@ export class ApoliceFormComponent {
         this.notify.error(msg);
       },
     });
-
-
-
   }
 
   cancelar() {

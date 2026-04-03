@@ -1,8 +1,6 @@
-import { Mensagem } from './../../../Mensagem';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { ApoliceService } from '../../../../core/services/ApoliceService ';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog-component/confirm-dialog-component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -18,11 +16,12 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { DateUtil } from '../../../util/DateUtil';
+import { PropostaService } from '../../../../core/services/PropostaService';
 
 declare var $: any;
 
 @Component({
-  selector: 'app-lista-apolice-component',
+  selector: 'app-lista-proposta-component',
   imports: [
     CommonModule,
     FormsModule,
@@ -39,55 +38,37 @@ declare var $: any;
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
   ],
-  templateUrl: './lista-apolice-component.html',
-  styleUrl: './lista-apolice-component.css',
+  templateUrl: './lista-proposta-component.html',
+  styleUrl: './lista-proposta-component.css',
 })
-export class ListaApoliceComponent implements OnInit, OnDestroy {
-  dtOptions: Config = {};
-  dtTrigger: Subject<any> = new Subject<any>();
-
+export class ListaPropostaComponent implements OnInit, OnDestroy {
   constructor(
-    private service: ApoliceService,
+    private service: PropostaService,
     private router: Router,
     private dialog: MatDialog,
   ) {}
-  ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
-  }
 
-  ngOnInit(): void {
-    // this.configDataTable();
-    this.carregarDados();
-  }
+  dtOptions: Config = {};
+  dtTrigger: Subject<any> = new Subject<any>();
 
   filtro = {
-    numeroApolice: '',
-    dataContratacao: '',
+    numeroProposta: '',
+    dataCriacao: '',
     status: '-1',
   };
 
-  configDataTable() {
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 5, // Quantidade padrão inicial
-      lengthMenu: [3, 5, 10, 25], // As opções que você pediu
-      searching: false, // Remove o campo de busca (Search)
-      processing: true, // Habilita o indicador de "Loading" nativo
-
-      // Tradução para Português
-      language: {
-        url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json',
-      },
-    };
-
-    this.dtTrigger.next(null);
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
   }
-  carregarDados() {
+  ngOnInit(): void {
 
+    this.carregarDados();
+  }
+
+  carregarDados() {
     //console.log('Carregar Dados');
-    if (this.filtro.dataContratacao)
-      this.filtro.dataContratacao =
-        DateUtil.formatarParaApi(new Date(this.filtro.dataContratacao)) ?? '';
+    if (this.filtro.dataCriacao)
+      this.filtro.dataCriacao = DateUtil.formatarParaApi(new Date(this.filtro.dataCriacao)) ?? '';
 
     console.log(this.filtro);
     this.service.listarComFiltro(this.filtro).subscribe({
@@ -101,11 +82,11 @@ export class ListaApoliceComponent implements OnInit, OnDestroy {
   }
 
   montarTabela(data: any[]) {
-    if ($.fn.DataTable.isDataTable('#tabelaApolice')) {
-      $('#tabelaApolice').DataTable().destroy();
+    if ($.fn.DataTable.isDataTable('#tabelaProposta')) {
+      $('#tabelaProposta').DataTable().destroy();
     }
 
-    $('#tabelaApolice').DataTable({
+    $('#tabelaProposta').DataTable({
       data: data,
       pagingType: 'full_numbers',
       pageLength: 5, // Quantidade padrão inicial
@@ -118,7 +99,8 @@ export class ListaApoliceComponent implements OnInit, OnDestroy {
         url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/pt-BR.json',
       },
       columns: [
-        { data: 'numeroApolice' },
+        { data: 'numeroProposta' },
+        { data: 'nomeCliente' },
         {
           data: 'valorCobertura',
           render: (data: any, type: any) => {
@@ -129,7 +111,7 @@ export class ListaApoliceComponent implements OnInit, OnDestroy {
           },
         },
         {
-          data: 'premioFinal',
+          data: 'premio',
           render: (data: any, type: any) => {
             if (type === 'display') {
               return MoedaUtil.formatarMoeda(data);
@@ -138,7 +120,7 @@ export class ListaApoliceComponent implements OnInit, OnDestroy {
           },
         },
         {
-          data: 'dataContratacao',
+          data: 'dataCriacao',
           render: (data: any) => {
             return new Date(data).toLocaleDateString('pt-BR');
           },
@@ -148,9 +130,9 @@ export class ListaApoliceComponent implements OnInit, OnDestroy {
           data: null,
           render: (data: any) => {
             return `
-              <button class="btn btn-primary edit-btn" data-id="${data.id}">Editar</button>
-              <button class="btn btn-danger delete-btn" data-id="${data.id}">Excluir</button>
-            `;
+                <button class="btn btn-primary edit-btn" data-id="${data.id}">Editar</button>
+                <button class="btn btn-danger delete-btn" data-id="${data.id}">Excluir</button>
+              `;
           },
         },
       ],
@@ -158,30 +140,31 @@ export class ListaApoliceComponent implements OnInit, OnDestroy {
 
     this.configurarEventos();
   }
-  configurarEventos() {
-    $('#tabelaApolice').off('click', '.edit-btn');
-    $('#tabelaApolice').off('click', '.delete-btn');
 
-    $('#tabelaApolice').on('click', '.edit-btn', (e: any) => {
+  configurarEventos() {
+    $('#tabelaProposta').off('click', '.edit-btn');
+    $('#tabelaProposta').off('click', '.delete-btn');
+
+    $('#tabelaProposta').on('click', '.edit-btn', (e: any) => {
       const id = $(e.currentTarget).data('id');
-      this.router.navigate(['/apolice/editar', id]);
+      this.router.navigate(['/proposta/editar', id]);
     });
 
-    $('#tabelaApolice').on('click', '.delete-btn', (e: any) => {
+    $('#tabelaProposta').on('click', '.delete-btn', (e: any) => {
       const id = $(e.currentTarget).data('id');
       this.confirmarExclusao(id);
     });
   }
 
   confirmarExclusao(id: number) {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent,{
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '100%',
-      maxWidth: "450px",
+      maxWidth: '450px',
       autoFocus: false,
-      data:{
-        titulo: "Excluir Apólice",
-        mensagem: "Deseja realmente remover este item do sistema?"
-      }
+      data: {
+        titulo: 'Excluir Proposta',
+        mensagem: 'Deseja realmente remover este item do sistema?',
+      },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -193,9 +176,8 @@ export class ListaApoliceComponent implements OnInit, OnDestroy {
     });
   }
 
-
   novo() {
-    this.router.navigate(['/apolice/novo']);
+    this.router.navigate(['/proposta/novo']);
   }
 
   pesquisar() {

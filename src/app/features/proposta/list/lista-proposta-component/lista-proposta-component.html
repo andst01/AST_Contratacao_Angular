@@ -1,0 +1,83 @@
+<div class="container mt-4">
+  <h2>Lista de Propostas</h2>
+
+  <button mat-raised-button color="primary" (click)="novo()">Nova Apólice</button>
+
+  <fieldset class="border p-3 mt-3">
+    <legend class="w-auto px-2">Filtro</legend>
+    <!--
+        <label>Número Apólice</label>
+        <input type="text" class="form-control" [(ngModel)]="filtro.numeroApolice" />
+    -->
+    <div class="row">
+      <div class="col-md-3">
+        <mat-form-field appearance="outline" class="w-100 compact-form">
+          <mat-label> Número da Proposta </mat-label>
+          <input matInput [(ngModel)]="filtro.numeroProposta" name="numeroApolice" />
+        </mat-form-field>
+      </div>
+      <!--
+      <label>Data Contratação</label>
+        <input type="date" class="form-control" [(ngModel)]="filtro.dataContratacao">
+      -->
+      <div class="col-md-3">
+        <mat-form-field appearance="outline" class="w-100 compact-form" density="compact">
+          <mat-label>Data de Criação</mat-label>
+
+          <input matInput [matDatepicker]="picker"
+          [(ngModel)]="filtro.dataCriacao"
+          />
+
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <!--
+        <label>Status</label>
+        <select class="form-control" [(ngModel)]="filtro.status" name="status">
+          <option value="-1">Todos</option>
+          <option value="1">Ativo</option>
+          <option value="2">Cancelado</option>
+          <option value="3">Cancelado</option>
+        </select>
+      -->
+      <div class="col-md-3">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Status</mat-label>
+          <mat-select [(ngModel)]="filtro.status" name="status">
+            <mat-option value="-1">Todos</mat-option>
+            <mat-option value="0">Criada</mat-option>
+            <mat-option value="1">Em Análise</mat-option>
+            <mat-option value="2">Aprovada</mat-option>
+            <mat-option value="3">Recusada</mat-option>
+            <mat-option value="4">Expirada</mat-option>
+
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!--
+        <button class="btn btn-primary w-100" (click)="pesquisar()">Pesquisar</button>
+      -->
+      <div class="col-md-3">
+        <button mat-raised-button color="primary" class="w-100" (click)="pesquisar()">
+          <mat-icon>search</mat-icon>
+          Pesquisar
+        </button>
+      </div>
+    </div>
+  </fieldset>
+
+  <table id="tabelaProposta" datatable class="table table-striped mt-3">
+    <thead>
+      <tr>
+        <th>Número Proposta</th>
+        <th>Cliente</th>
+        <th>Cobertura</th>
+        <th>Prêmio</th>
+        <th>Data de Criação</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+  </table>
+</div>

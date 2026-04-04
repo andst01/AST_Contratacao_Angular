@@ -1,7 +1,10 @@
 <div class="container mt-4">
   <h2>Lista de Propostas</h2>
 
-  <button mat-raised-button color="primary" (click)="novo()">Nova Proposta</button>
+  <button mat-raised-button color="primary" (click)="novo()">
+    <fa-icon [icon]="faPlus" class="me-2"></fa-icon>
+    Nova Proposta
+  </button>
 
   <fieldset class="border p-3 mt-3">
     <legend class="w-auto px-2">Filtro</legend>
@@ -24,9 +27,7 @@
         <mat-form-field appearance="outline" class="w-100 compact-form" density="compact">
           <mat-label>Data de Criação</mat-label>
 
-          <input matInput [matDatepicker]="picker"
-          [(ngModel)]="filtro.dataCriacao"
-          />
+          <input matInput [matDatepicker]="picker" [(ngModel)]="filtro.dataCriacao" />
 
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
@@ -51,7 +52,6 @@
             <mat-option value="2">Aprovada</mat-option>
             <mat-option value="3">Recusada</mat-option>
             <mat-option value="4">Expirada</mat-option>
-
           </mat-select>
         </mat-form-field>
       </div>
@@ -60,7 +60,8 @@
       -->
       <div class="col-md-3">
         <button mat-raised-button color="primary" class="w-100" (click)="pesquisar()">
-          <mat-icon>search</mat-icon>
+          <!-- <mat-icon>search</mat-icon> -->
+          <fa-icon [icon]="faSearch" class="me-2"></fa-icon>
           Pesquisar
         </button>
       </div>

@@ -33,6 +33,7 @@
             "styles": ["src/material-theme.scss",
                       "node_modules/datatables.net-dt/css/dataTables.dataTables.min.css",
                       "node_modules/bootswatch/dist/united/bootstrap.css",
+                      "node_modules/ngx-spinner/animations/ball-rotate.css",
                       "src/styles.css"]
           },
           "configurations": {

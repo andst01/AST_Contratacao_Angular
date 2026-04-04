@@ -17,6 +17,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { DateUtil } from '../../../util/DateUtil';
 import { PropostaService } from '../../../../core/services/PropostaService';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faPlus, faPen, faTrash, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { icon } from '@fortawesome/fontawesome-svg-core';
 
 declare var $: any;
 
@@ -33,6 +36,7 @@ declare var $: any;
     ReactiveFormsModule,
     MatSelectModule,
     MatIconModule,
+    FontAwesomeModule
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
@@ -50,6 +54,10 @@ export class ListaPropostaComponent implements OnInit, OnDestroy {
 
   dtOptions: Config = {};
   dtTrigger: Subject<any> = new Subject<any>();
+  faPlus = faPlus;
+  faEdit = faPen;
+  faTrash = faTrash;
+  faSearch = faSearch;
 
   filtro = {
     numeroProposta: '',
@@ -70,7 +78,7 @@ export class ListaPropostaComponent implements OnInit, OnDestroy {
     if (this.filtro.dataCriacao)
       this.filtro.dataCriacao = DateUtil.formatarParaApi(new Date(this.filtro.dataCriacao)) ?? '';
 
-    console.log(this.filtro);
+   
     this.service.listarComFiltro(this.filtro).subscribe({
       next: (data) => {
         this.montarTabela(data);
@@ -129,9 +137,15 @@ export class ListaPropostaComponent implements OnInit, OnDestroy {
         {
           data: null,
           render: (data: any) => {
+             const editIconHtml = icon(faPen).html[0];
+            const deleteIconHtml = icon(faTrash).html[0];
             return `
-                <button class="btn btn-primary edit-btn" data-id="${data.id}">Editar</button>
-                <button class="btn btn-danger delete-btn" data-id="${data.id}">Excluir</button>
+                <button class="btn btn-primary edit-btn" title="Editar" data-id="${data.id}">
+                  ${editIconHtml}
+                </button>
+                <button class="btn btn-danger delete-btn" title="Excluir" data-id="${data.id}">
+                  ${deleteIconHtml}
+                </button>
               `;
           },
         },

@@ -8,12 +8,13 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { provideAuth, LogLevel, OidcSecurityService } from 'angular-auth-oidc-client';
 import { customAuthInterceptor } from './config/customAuthInterceptor';
 import { APP_INITIALIZER } from '@angular/core';
+import { loadingInterceptor } from './config/loadingInterceptor';
 
 export const appConfig: ApplicationConfig = {
 
   providers: [
     provideHttpClient(
-      withInterceptors([customAuthInterceptor]),
+      withInterceptors([customAuthInterceptor, loadingInterceptor]),
       withInterceptorsFromDi()
        // Seu interceptor aqui
     ),

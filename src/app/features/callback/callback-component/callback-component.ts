@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { AuthService } from '../../../core/services/AuthService';
@@ -9,24 +9,19 @@ import { AuthService } from '../../../core/services/AuthService';
   templateUrl: './callback-component.html',
   styleUrl: './callback-component.css',
 })
-export class CallbackComponent {
+export class CallbackComponent  {
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
-  constructor(private authService: AuthService,
-              private router: Router){}
-
-  ngOnInit() {
-
-    this.authService.checkAuth().subscribe(({ isAuthenticated }) => {
-      if (isAuthenticated) {
-        console.log("Usuario: ")
-        console.log(this.authService.userProfile)
+  constructor() {
+    effect(() => {
+      if (this.authService.loggedIn()) {
+        console.log('Login detectado, redirecionando para apolice...');
         this.router.navigate(['/apolice']);
       } else {
-
         this.router.navigate(['/']);
       }
     });
-
   }
 
 }

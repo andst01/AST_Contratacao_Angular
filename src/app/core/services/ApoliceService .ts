@@ -26,7 +26,8 @@ private api = environment.apiApolice;
 
    obterPorId(id: number): Observable<Apolice> {
     return this.http.get<Apolice>(
-      `${this.api}/ObterContratacaoPropostaClientePorId/${id}`
+      `${this.api}/ObterContratacaoPropostaClientePorId/${id}`,
+      { headers: { 'ignore-loading': 'true' } }
     );
   }
 

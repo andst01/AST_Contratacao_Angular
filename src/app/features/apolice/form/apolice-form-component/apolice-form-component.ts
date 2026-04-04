@@ -27,6 +27,7 @@ import { PropostaService } from '../../../../core/services/PropostaService';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { Proposta } from '../../../proposta/models/Proposta';
 import { NotificationService } from '../../../../core/services/NotificationService';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -81,10 +82,18 @@ export class ApoliceFormComponent implements OnInit {
     private router: Router,
     private propostaService: PropostaService,
     private notify: NotificationService,
+    private spinner: NgxSpinnerService
   ) {}
 
   ngOnInit(): void {
-    this.form = this.fb.group(
+   
+    this.carregarForm();
+    this.carregarDados();
+
+  }
+
+  carregarForm(){
+     this.form = this.fb.group(
       {
         id: [0],
         idProposta: [0, Validators.required],
@@ -103,7 +112,11 @@ export class ApoliceFormComponent implements OnInit {
     );
 
     this.id = this.route.snapshot.params['id'];
+  }
 
+  carregarDados(){
+    
+    this.spinner.show();
     if (this.id) {
       this.isEdit = true;
       let objProposta = {} as Proposta;
@@ -132,6 +145,8 @@ export class ApoliceFormComponent implements OnInit {
         this.setupFiltro();
       });
     }
+
+    this.spinner.hide();
   }
 
   onValorCoberturaChange(event: any) {

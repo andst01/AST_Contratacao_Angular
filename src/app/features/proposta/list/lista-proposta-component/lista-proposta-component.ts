@@ -36,7 +36,7 @@ declare var $: any;
     ReactiveFormsModule,
     MatSelectModule,
     MatIconModule,
-    FontAwesomeModule
+    FontAwesomeModule,
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
@@ -69,7 +69,6 @@ export class ListaPropostaComponent implements OnInit, OnDestroy {
     this.dtTrigger.unsubscribe();
   }
   ngOnInit(): void {
-
     this.carregarDados();
   }
 
@@ -78,7 +77,6 @@ export class ListaPropostaComponent implements OnInit, OnDestroy {
     if (this.filtro.dataCriacao)
       this.filtro.dataCriacao = DateUtil.formatarParaApi(new Date(this.filtro.dataCriacao)) ?? '';
 
-   
     this.service.listarComFiltro(this.filtro).subscribe({
       next: (data) => {
         this.montarTabela(data);
@@ -137,7 +135,7 @@ export class ListaPropostaComponent implements OnInit, OnDestroy {
         {
           data: null,
           render: (data: any) => {
-             const editIconHtml = icon(faPen).html[0];
+            const editIconHtml = icon(faPen).html[0];
             const deleteIconHtml = icon(faTrash).html[0];
             return `
                 <button class="btn btn-primary edit-btn" title="Editar" data-id="${data.id}">

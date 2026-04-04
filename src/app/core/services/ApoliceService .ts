@@ -43,7 +43,7 @@ private api = environment.apiApolice;
   }
 
   salvar(apolice: Apolice): Observable<Apolice> {
-    debugger;
+    
     if(apolice.id > 0) return this.atualizar(apolice)
     else return this.criar(apolice);
   }

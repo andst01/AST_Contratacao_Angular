@@ -123,10 +123,7 @@ export class ApoliceFormComponent implements OnInit {
           });
         });
 
-        // console.log(this.listaMestraPropostas);
-
-        //const propostaCompleta = this.listaMestraPropostas.find((p) => p.id === data.idProposta);
-        //console.log(this.listaMestraPropostas[0])
+      
       });
     } else {
       this.propostaService.listar().subscribe((dados) => {
@@ -159,7 +156,7 @@ export class ApoliceFormComponent implements OnInit {
 
   carregarDadosProposta() {
     if (this.isEdit) {
-      debugger;
+  
       const idProposta = this.form.value.idProposta;
       this.propostaService.obterPorId(idProposta).subscribe((dados) => {
         this.listaMestraPropostas.push(dados);
@@ -202,8 +199,6 @@ export class ApoliceFormComponent implements OnInit {
     if (this.form.invalid) return;
     const formValue = this.form.getRawValue();
 
-    console.log(this.form.value);
-
     const payload = {
       ...formValue,
       idProposta: formValue.idProposta?.id ? formValue.idProposta.id : formValue.idProposta,
@@ -213,8 +208,6 @@ export class ApoliceFormComponent implements OnInit {
       dataFimVigencia: DateUtil.formatarParaApi(formValue.dataFimVigencia),
       dataContratacao: DateUtil.formatarParaApi(formValue.dataContratacao),
     };
-
-    console.log(payload);
 
     this.service.salvar(payload).subscribe({
       next: (data) => {

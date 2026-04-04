@@ -91,7 +91,7 @@ export class ListaApoliceComponent implements OnInit, OnDestroy {
     this.dtTrigger.next(null);
   }
   carregarDados() {
-    //console.log('Carregar Dados');
+    
     if (this.filtro.dataContratacao)
       this.filtro.dataContratacao =
         DateUtil.formatarParaApi(new Date(this.filtro.dataContratacao)) ?? '';

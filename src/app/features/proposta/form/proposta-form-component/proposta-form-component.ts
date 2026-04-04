@@ -103,9 +103,7 @@ export class PropostaFormComponent implements OnInit {
       this.form.get('idCliente')?.disable();
 
       this.service.obterPorId(this.id).subscribe((data) => {
-        console.log("Proposta:")
-        console.log(data);
-        
+       
         this.valorCoberturaFormatado = MoedaUtil.formatarMoeda(data.valorCobertura);
         this.premioFinalFormatado = MoedaUtil.formatarMoeda(data.premio);
 
@@ -173,8 +171,6 @@ export class PropostaFormComponent implements OnInit {
     if (this.form.invalid) return;
     const formValue = this.form.getRawValue();
 
-    console.log(this.form.value);
-
     const payload = {
       ...formValue,
       idCliente: formValue.idCliente?.id ? formValue.idCliente.id : formValue.idCliente,
@@ -184,8 +180,7 @@ export class PropostaFormComponent implements OnInit {
       dataCriacao: DateUtil.formatarParaApi(formValue.dataCriacao),
     };
 
-    console.log(payload);
-
+   
     this.service.salvar(payload).subscribe({
       next: (data) => {
         this.notify.success(data.mensagem?.descricao ?? 'Salvo com sucesso!');

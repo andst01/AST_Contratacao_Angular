@@ -40,7 +40,7 @@ export class PropostaService {
   }
 
   salvar(proposta: Proposta): Observable<Proposta> {
-    debugger;
+   
     if (proposta.id > 0) return this.atualizar(proposta);
     else return this.criar(proposta);
   }
